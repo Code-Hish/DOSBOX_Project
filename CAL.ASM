@@ -34,6 +34,7 @@ main proc
 ;display calculator interface
 start:
 	call printNewLine
+	call printNewLine
 	mov ah, 09h
 	mov dx, offset msg1
 	int 21h
@@ -96,6 +97,7 @@ divOp:
 	JMP start	
 exitProgram:		
 	; exit of program
+	call printNewLine
 	mov ah,4ch
 	int 21h
 
