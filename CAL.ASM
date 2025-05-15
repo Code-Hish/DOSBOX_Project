@@ -7,6 +7,7 @@ inputMsg2 db "Enter Second number: $"
 outputMsg db "Result = $"
 invalidChoice db "Invalid Choice$"
 
+msg db "---------------A SIMPLE CALCULATOR----------------$"
 msg1 db "Enter '+' for Addition$"
 msg2 db "Enter '-' for Substraction$"
 msg3 db "Enter '*' for Multiplication$"
@@ -31,9 +32,14 @@ assume cs: code, ds: data
 main proc
 	mov ax,data
 	mov ds,ax
+	call printNewLine
+	call printNewLine
+	mov ah, 09h
+	mov dx, offset msg
+	int 21h
+	call printNewLine
 ;display calculator interface
 start:
-	call printNewLine
 	call printNewLine
 	mov ah, 09h
 	mov dx, offset msg1
@@ -76,6 +82,7 @@ start:
 	mov ah,09h
 	mov dx, offset invalidChoice 
 	int 21h
+	call printNewLine
 	JMP start
 	
 ; perform operation	
@@ -98,6 +105,7 @@ divOp:
 exitProgram:		
 	; exit of program
 	call printNewLine
+	call printNewLine
 	mov ah,4ch
 	int 21h
 
@@ -105,6 +113,7 @@ main endp
 
 ;take two numbers
 inputForNumbers proc
+	call printNewLine
 	mov ah,09h
 	mov dx, offset inputMsg1
 	int 21h
@@ -237,11 +246,11 @@ displayNumber proc
 	int 21h
 	
 lab:
-	mov counter,0						; counter = no of digitst in num, set no of digit = 0
+	mov counter,0						; counter = no of digits in num, set no of digit = 0
 	mov bx,10							
 	mov ax,val							; save value in ax
 	cmp ax,0							; if num is zero, then print 0 and exit
-	JNE saveDigit						; if num is not zero then save digit
+	JNE saveDigit						; if num is not zero then save digit				
 	mov ah,02h		
 	mov dl,'0'	
 	int 21h
@@ -258,7 +267,7 @@ stopSaveDigit:
 	
 	mov cl,1							;loop counter cl =1
 startPrint:
-	cmp cl,counter						;check if cl > no of digitst , then stop printing the digit
+	cmp cl,counter						;check if cl > no of digits , then stop printing the digit
 	JA stopPrint						
 	mov ah,02h					
 	pop dx	
@@ -267,6 +276,7 @@ startPrint:
 	inc cl								; inc the loop counter
 	JMP startPrint						; print next digit
 stopPrint:								;stop print
+	call printNewLine
 	pop dx
 	pop cx
 	pop bx
